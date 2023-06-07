@@ -9,7 +9,7 @@ import dash_bootstrap_components as dbc
 
 from app import server
 from app import app
-from pages import  home, seccion1, seccion2, seccion3
+from pages import  home, seccion1, seccion2, seccion3, seccion4
 
 # building the navigation bar
 # https://github.com/facultyai/dash-bootstrap-components/blob/master/examples/advanced-component-usage/Navbars.py
@@ -161,7 +161,7 @@ def display_page(pathname):
     elif pathname == '/seccion3':
         return seccion3.layout
     elif pathname == '/seccion4':
-        return seccion3.layout
+        return seccion4.layout
     else:
         return home.layout
 
