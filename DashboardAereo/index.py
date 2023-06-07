@@ -16,13 +16,21 @@ from pages import  home, seccion1, seccion2, seccion3
 dropdown = dbc.DropdownMenu(
     children=[
         # dbc.DropdownMenuItem("Inicio", href="/home"),
-        dbc.DropdownMenuItem("Seccion 1", href="/seccion1"),
-        dbc.DropdownMenuItem("Seccion 2", href="/seccion2"),
-        dbc.DropdownMenuItem("Seccion 3", href="/seccion3"),
+        dbc.DropdownMenuItem("Introducción y datos principales", href="/seccion1"),
+        dbc.DropdownMenuItem("Causas comunes de accidentes", href="/seccion2"),
+        dbc.DropdownMenuItem("Patrones geográficos y temporales", href="/seccion3"),
+        dbc.DropdownMenuItem("Modelos de aviones involucrados", href="/seccion4"),
     ],
     nav = True,
     in_navbar = True,
     label = "Secciones",
+    style={
+                                                "data-bs-toggle": "dropdown",
+                                                
+                                                "role": "button",
+                                                "aria-haspopup": "true",
+                                                "aria-expanded": "false",
+                                            },
 )
 
 
@@ -50,7 +58,7 @@ navbar = dbc.Navbar(
                     className="me-auto",
                     children=[
                         dbc.NavItem(
-                            dbc.NavLink("Home", active=True, href="/home"),
+                            dbc.NavLink("Inicio", active=True, href="/home"),
                         ),
                         dbc.NavItem(
                             dbc.NavLink("Acerca del Proyecto", href="#"),
@@ -148,12 +156,12 @@ app.layout = html.Div([
 def display_page(pathname):
     if pathname == '/seccion1':
         return seccion1.layout
-
     elif pathname == '/seccion2':
         return seccion2.layout
     elif pathname == '/seccion3':
         return seccion3.layout
-
+    elif pathname == '/seccion4':
+        return seccion3.layout
     else:
         return home.layout
 
