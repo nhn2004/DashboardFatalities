@@ -244,6 +244,19 @@ fig.update_traces(textfont_color='white')'''
 ######
 ######
 ######
+button = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(dbc.Button("Conteo de fallecimientos por accidente", color="primary", id='b1',n_clicks=1), width="auto"),
+                dbc.Col(dbc.Button("Conteo de casos de accidente",color="secondary", id='b2',n_clicks=0), width="auto"),
+            ],
+            justify="center",
+            align="center",
+        )
+    ],
+    className="d-grid gap-2 col-6 mx-auto",
+)
 
 decades=[
     {'label':"70's", 'value':"70's"},
@@ -254,15 +267,7 @@ decades=[
     { 'label':"20's",'value':"20's"}
 ]
 
-
-
-layout = html.Div([
-    dbc.Container([
-        dbc.Row([
-            dbc.Col(html.H1("Patrones geográficos y temporales", className="text-center")
-                    , className="mb-5 mt-5")
-        ]),
-        html.Div([
+Fatalities=html.Div([
             dbc.Row([
                 dbc.Col([
                     html.P('Decades:')
@@ -284,9 +289,43 @@ layout = html.Div([
                     ,html.Br()
                     ,dcc.Graph(id='barchart')  ])])
         ])
+
+
+layout = html.Div([
+    dbc.Container([
+        dbc.Row([
+            dbc.Col(html.H1("Patrones geográficos y temporales", className="text-center")
+                    , className="mb-5 mt-5")
+        ]),
+        button
+        , html.Div(id='button_selected')
     
   ])
 ])
+@app.callback(
+    Output('b1','color'),
+    Output('b2','color'),
+    Output('b1','disabled'),
+    Output('b2','disabled'),
+    Output('button_selected','children'),
+    Input('b1','n_clicks'),
+    Input('b2','n_clicks'),
+    State("b1", "disabled"), 
+    State("b2", "disabled")  
+)
+def update_button_colors(clicks_button1, clicks_button2,bd1,bd2):
+    
+    if clicks_button1 > clicks_button2:
+        bd1=True 
+        bd2=False
+        return "primary", "secondary",bd1,bd2,Fatalities
+    elif clicks_button2 <= clicks_button1:
+        bd2=True
+        bd1=False
+        return "secondary", "primary",bd1,bd2,html.Div([html.P('IN PROCESS')])
+    else:
+        bd1,bd2=False,False
+        return  "primary", "secondary",bd1,bd2,Fatalities
 
 @app.callback(
     Output('range-slider', 'min'),
@@ -322,7 +361,7 @@ def update_range_slider(value):
 @app.callback(
     Output('linechart','figure'),
     Output('barchart','figure'),
-    Input('range-slider','value')
+    Input('range-slider','value'),
     
 ) 
 def update_linechart(range_s):
@@ -346,8 +385,8 @@ def update_linechart(range_s):
     for val,tipo in zip([total['fatalities'].max(),total['fatalities'].min()],['max','min']):
         month=total['month'][total['fatalities']==val].values[0]
         if tipo=='min':
-            val=val-20
-        else: val=val+20
+            val=val-9
+        else: val=val+9
         fig.add_annotation(x=month, y=val, text=f'{tipo.upper()}',align='center',showarrow=False)
 
     table=go.Table(
@@ -361,10 +400,12 @@ def update_linechart(range_s):
     fig2=px.bar(data_frame=total , x='month',y='fatalities',hover_name='year',color='year',text=total['percentage'], height=899, width=900)
     for value,month in zip(totalFatXyear,total['month'].unique()):
         value=int(value)
-        fig2.add_annotation(x=month,y=value+25,text=f'total:{value}', font={'size':12 ,'color':'blue'}, textangle=0,showarrow=False,align='center',opacity=1)
+        fig2.add_annotation(x=month,y=value+0.1*value,text=f'total:{value}', font={'size':12 ,'color':'blue'}, textangle=0,showarrow=False,align='center',opacity=1)
     fig2.update_layout(autosize=False, width=950)
     fig2.update_traces(textfont_color='white')    
            
     
     return fig,fig2
 
+if __name__ == "__main__":
+    app.run_server(debug=True)
