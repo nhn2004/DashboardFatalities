@@ -22,7 +22,7 @@ import plotly.graph_objects as go
 
 
 # %%
-df = pd.read_csv('pages/aviation-accident-data-2023-05-16.csv')
+df = pd.read_csv('DashboardAereo/pages/aviation-accident-data-2023-05-16.csv')
 df
 df['location'][df['location'].isnull()]='unknown'
 df['operator'][df['operator'].isnull()]='unknown'
