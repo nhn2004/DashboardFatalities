@@ -55,6 +55,20 @@ navbar = dbc.Navbar(
             navbar=True,
             children=[
                 dbc.Container([
+                    html.A(
+                # Use row and col to control vertical alignment of logo / brand
+                dbc.Row(
+                    [
+                        dbc.Col(html.Img(src="assets/titulo-blanco.png", height="60px"),style={"height":"6vw","margin-top":"5px"}),
+                        
+                    ],
+                    align="center",
+                    className="g-0",
+                    
+                ),
+                href="/home",
+                style={"display":"flex"}
+                ),
                     dbc.Nav(
                     className="me-auto",
                     children=[
@@ -77,20 +91,7 @@ navbar = dbc.Navbar(
                         ),
                     ],
                 ),
-                html.A(
-                # Use row and col to control vertical alignment of logo / brand
-                dbc.Row(
-                    [
-                        dbc.Col(html.Img(src="assets/logo_espol.png", height="30px"),style={"position": "relative", "right": "1vw"}),
-                        dbc.Col(dbc.NavbarBrand("ESPOL DASH", className="ml-2")),
-                    ],
-                    align="center",
-                    className="g-0",
-                    
-                ),
-                href="/home",
-                style={"display":"flex"}
-                )
+                
 
                 ])
                 
@@ -153,7 +154,9 @@ for i in [2]:
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     navbar,
-    html.Div(id='page-content')
+    dbc.Col(style={"height":"4px","background-color":"#ce3434"}),
+    html.Div(id='page-content'),
+    
 ])
 
 
