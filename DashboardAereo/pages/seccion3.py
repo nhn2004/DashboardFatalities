@@ -23,7 +23,7 @@ import plotly.graph_objects as go
 
 # %%
 df = pd.read_csv('DashboardAereo/pages/aviation-accident-data-2023-05-16.csv')
-df
+# df
 df['location'][df['location'].isnull()]='unknown'
 df['operator'][df['operator'].isnull()]='unknown'
 df['fatalities'][df['fatalities'].isnull()]='unknown'
@@ -77,7 +77,7 @@ df['month'][df['month'].str.contains('14')]='unknown'
 # year - Year of the accident
 
 # %%
-df
+# df
 
 # %% [markdown]
 # En que meses del año han ocurrido más accidentes aéreos?
@@ -93,11 +93,11 @@ df
 
 # %%
 
-df.info()
+# df.info()
 
 # %%
 
-df.month.unique()
+# df.month.unique()
 
 # %% [markdown]
 # DataFrame "df" was copied into dfnan with np.nan instead of "unknowns".
@@ -105,11 +105,11 @@ df.month.unique()
 # %%
 
 dfnan = df.replace("unknown",np.nan)
-dfnan.head()
+# dfnan.head()
 
 # %%
 
-dfnan.info()
+# dfnan.info()
 
 # %% [markdown]
 # 
@@ -166,7 +166,7 @@ df[df.duplicated()]
 
 # %%
 
-dfnan.info()
+# dfnan.info()
 
 # %% [markdown]
 # Transforming years to float because of cardinality benefits.
