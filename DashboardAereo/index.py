@@ -54,7 +54,8 @@ navbar = dbc.Navbar(
             id="navbar-collapse",
             navbar=True,
             children=[
-                dbc.Nav(
+                dbc.Container([
+                    dbc.Nav(
                     className="me-auto",
                     children=[
                         dbc.NavItem(
@@ -84,10 +85,15 @@ navbar = dbc.Navbar(
                         dbc.Col(dbc.NavbarBrand("ESPOL DASH", className="ml-2")),
                     ],
                     align="center",
-                    className="g-0"
+                    className="g-0",
+                    
                 ),
                 href="/home",
-                ),
+                style={"display":"flex"}
+                )
+
+                ])
+                
             ],
             
         ),
