@@ -104,8 +104,147 @@ navbar = dbc.Navbar(
 )
 
 
+footer = dbc.Container(
+    dbc.Row(
+        dbc.Col(
+            html.P("Este es el footer de la página.", className="text-center text-muted"),
+            className="py-3"
+        )
+    ),
+    fluid=True,
+    className="bg-dark text-light",
+    # style={"position": "fixed", "bottom": 0, "width": "100%"}
+)
+footer= dbc.Container(
 
-
+        dbc.Container(
+        [
+            dbc.Row(
+                    dbc.Nav(
+                    className="me-auto",
+                    children=[
+                        dbc.NavItem(
+                            dbc.NavLink("Privacidad", href="#",style={"color":"white","font-size":"12pt"})
+                        ),
+                        dbc.NavItem(
+                            dbc.NavLink("|", href="#",style={"color":"white","font-size":"12pt"})
+                        ),
+                        dbc.NavItem(
+                            dbc.NavLink("Accesibilidad", href="#",style={"color":"white","font-size":"12pt"}),
+                        ),
+                        dbc.NavItem(
+                            dbc.NavLink("|", href="#",style={"color":"white","font-size":"12pt"})
+                        ),
+                        dbc.NavItem(
+                            dbc.NavLink("Política de la Web", href="#",style={"color":"white","font-size":"12pt"}),
+                        ),
+                        dbc.NavItem(
+                            dbc.NavLink("|", href="#",style={"color":"white","font-size":"12pt"})
+                        ),
+                        dbc.NavItem(
+                            dbc.NavLink("Contáctanos", href="#",style={"color":"white","font-size":"12pt"}),
+                        ),
+                        
+                    ],style={"display":"flex","justify-content":"center"}
+                )
+                    # html.Ul(
+                    #     [
+                    #         html.Li(html.A("Privacidad", href="/about/Pages/privacy.aspx", target="_blank"),className="item-footer"),
+                    #         html.Li(html.A("Accesibilidad", href="/about/Pages/acessibility.aspx", target="_blank"),className="item-footer"),
+                    #         html.Li(html.A("Politica de la Web", href="/about/Pages/Website-Policies.aspx", target="_blank"),className="item-footer"),
+                            
+                    #         html.Li(html.A("FOIA", href="/about/foia", target="_blank"),className="item-footer"),
+                            
+                    #         html.Li(html.A("Contactanos", href="/about/Pages/contact.aspx", target="_blank"),className="item-footer"),
+                    #     ]
+                    # ),
+                    
+                    # className="lista-horizontal",
+                    
+                
+            ),
+            html.Hr(style={"margin-top":"35px"}),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        html.P(
+                            [
+                                html.Span("Investigacion sobre los accidentes quese han reportado desde 1961", className="mobile-break"),
+                                
+                            ]
+                        ),
+                        width=9
+                    ),
+                    dbc.Col(
+                        html.P(
+                            [
+                                html.A("AIR (Aircraft Incident Report)", href="#", target="_blank",style={"color":"white"}),
+                                
+                            ]
+                        ),
+                        width=3,
+                        className="right"
+                    ),
+                ],
+                className="credits",
+                style={"margin-top":"35px"}
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        dbc.Container(
+                        [
+                            html.H4("Connect With Us:",style={"color":"white"}),
+                    #         dbc.Nav(
+                    
+                            dbc.Nav(
+                                className="me-auto",
+                                children=[
+                                    
+                                    
+                                    html.A(html.Img(src="assets/social-midia-1.png", height="50px"), href="#"),
+                                   
+                                    html.A(html.Img(src="assets/social-midia-2.png", height="50px"), href="#"),
+                                   
+                                    html.A(html.Img(src="assets/social-midia-3.png", height="50px"), href="#"),
+                                    # html.A(html.I(className="fab fa-flickr"), href="#", target="_blank"),
+                                    # html.A(html.I(className="fab fa-linkedin"), href="#", target="_blank"),
+                                ],
+                                
+                                
+                            ),
+                            
+                        ],
+                        
+                        
+                        ),
+                        width=6,
+                        className="social-media",
+                        style={"display": "flex", "align-items": "center", "justify-content": "center"}
+                    ),
+                    dbc.Col(
+                        html.Div(
+                            html.Img(alt="NTSB Seal", src="assets/logo-imagen-avion.png", style={"height":"150px"}),
+                            className="logo",
+                            style={"display":"flex","justify-content":"center"}
+                        ),
+                        width=6
+                    ),
+                ],
+                style={"margin-top":"15px"}
+            ),
+        ],
+        
+        className="container",
+        
+        
+    ),
+    fluid=True,
+    className="bg-dark text-light",
+    style={ "padding": "64px 0"}
+    
+    
+)
 
 # navbar = dbc.Navbar(
 #     dbc.Container(
@@ -156,6 +295,8 @@ app.layout = html.Div([
     navbar,
     dbc.Col(style={"height":"4px","background-color":"#ce3434"}),
     html.Div(id='page-content'),
+    dbc.Col(style={"height":"4px","background-color":"#ce3434","margin": "32px 0 0 0"}),
+    footer,
     
 ])
 
