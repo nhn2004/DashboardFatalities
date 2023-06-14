@@ -83,7 +83,7 @@ layout = html.Div([
                             html.Img(src="assets/David.jpg", style={'height':'300px','width': '300px','object-fit': 'cover','border-radius': '50%','overflow': 'hidden'})
                         ],style={"display":"flex","justify-content":"center"}),
                         html.Div([
-                            html.H3(["Sumba Correo",
+                            html.H3(["Sumba Correa",
                                     html.Br(),
                                     "David Salomón"
                             ], style={'text-align':'center'}),
