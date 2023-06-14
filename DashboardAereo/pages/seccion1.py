@@ -29,9 +29,7 @@ df['type'][df['type'].str.contains('unknown')]='unknown'
 df['country'][df['country'].str.contains('nkn')]='unknown'
 df['country'][df['country'].str.contains('\?')]='unknown'
 df['location'][df['location'].str.contains('\?')]='unknown'
-df = df.replace("??", "unknown")
-df = df.replace("date unk.", "unknown")
-
+df = df.replace(["??","date unk.","Unknown"], "unknown")
 
 #Añadimos meses
 lmonth=[]
