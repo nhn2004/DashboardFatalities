@@ -9,7 +9,7 @@ import dash_bootstrap_components as dbc
 
 from app import server
 from app import app
-from pages import  home, seccion1, seccion2, seccion3, seccion4
+from pages import  home, seccion1, seccion2, seccion3, seccion4, about
 
 # building the navigation bar
 # https://github.com/facultyai/dash-bootstrap-components/blob/master/examples/advanced-component-usage/Navbars.py
@@ -76,7 +76,7 @@ navbar = dbc.Navbar(
                             dbc.NavLink("Inicio", active=True, href="/home"),
                         ),
                         dbc.NavItem(
-                            dbc.NavLink("Acerca del Proyecto", href="#"),
+                            dbc.NavLink("Acerca del Proyecto", active=True, href="/about"),
                         ),
                         # dbc.NavItem(
                         #     dbc.NavLink("Pricing", href="#"),
@@ -194,7 +194,7 @@ footer= dbc.Container(
                     dbc.Col(
                         dbc.Container(
                         [
-                            html.H4("Connect With Us:",style={"color":"white"}),
+                            html.H4("Contactanos:",style={"color":"white"}),
                     #         dbc.Nav(
                     
                             dbc.Nav(
@@ -312,6 +312,9 @@ def display_page(pathname):
         return seccion3.layout
     elif pathname == '/seccion4':
         return seccion4.layout
+    elif pathname == '/about':
+        return about.layout
+    
     else:
         return home.layout
 
