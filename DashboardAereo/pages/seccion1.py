@@ -15,7 +15,7 @@ import dash_bootstrap_components as dbc
 from app import app
 
 
-df = pd.read_csv('aviation-accident-data-2023-05-16.csv')
+df = pd.read_csv('DashboardAereo/pages/aviation-accident-data-2023-05-16.csv')
 fechas = df.date
 dias = fechas.str.split("-", expand=True)[0]
 df['day'] = dias

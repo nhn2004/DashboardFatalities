@@ -1,6 +1,9 @@
 import plotly.express as px
 import pandas as pd
 from plotly.subplots import make_subplots
+import folium
+import json
+import requests
 
 
 import dash
@@ -239,7 +242,213 @@ for value,month in zip(totalFatXyear,total['month'].unique()):
 fig.update_layout(autosize=False, width=950)
 fig.update_traces(textfont_color='white')'''
 
+df_coordinates=pd.read_csv('DashboardAereo\pages\coordinates.csv')
+df_coordinates.dropna(inplace=True)
 
+countries_geometries= 'https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson'
+response = requests.get(countries_geometries)
+data= json.loads(response.text)
+
+admin_names = [feature['properties']['ADMIN'] for feature in data["features"]]
+geometries= [feature['geometry']['coordinates'] for feature in data["features"]]
+coor=[]
+
+country_dict = {
+    "Afganistán": "Afghanistan",
+    "Albania": "Albania",
+    "Alemania": "Germany",
+    "Andorra": "Andorra",
+    "Angola": "Angola",
+    "Antigua y Barbuda": "Antigua and Barbuda",
+    "Arabia Saudita": "Saudi Arabia",
+    "Argelia": "Algeria",
+    "Argentina": "Argentina",
+    "Armenia": "Armenia",
+    "Aruba": "Aruba",
+    "Australia": "Australia",
+    "Austria": "Austria",
+    "Azerbaiyán": "Azerbaijan",
+    "Bahamas": "Bahamas",
+    "Bangladés": "Bangladesh",
+    "Barbados": "Barbados",
+    "Baréin": "Bahrain",
+    "Bélgica": "Belgium",
+    "Belice": "Belize",
+    "Benín": "Benin",
+    "Bielorrusia": "Belarus",
+    "Birmania": "Myanmar",
+    "Bolivia": "Bolivia",
+    "Bosnia y Herzegovina": "Bosnia and Herzegovina",
+    "Botsuana": "Botswana",
+    "Brasil": "Brazil",
+    "Brunéi": "Brunei",
+    "Bulgaria": "Bulgaria",
+    "Burkina Faso": "Burkina Faso",
+    "Burundi": "Burundi",
+    "Bután": "Bhutan",
+    "Cabo Verde": "Cape Verde",
+    "Camboya": "Cambodia",
+    "Camerún": "Cameroon",
+    "Canadá": "Canada",
+    "Catar": "Qatar",
+    "Chad": "Chad",
+    "Chile": "Chile",
+    "China": "China",
+    "Chipre": "Cyprus",
+    "Ciudad del Vaticano": "Vatican City",
+    "Colombia": "Colombia",
+    "Comoras": "Comoros",
+    "Corea del Norte": "North Korea",
+    "Corea del Sur": "South Korea",
+    "Costa de Marfil": "Ivory Coast",
+    "Costa Rica": "Costa Rica",
+    "Croacia": "Croatia",
+    "Cuba": "Cuba",
+    "Dinamarca": "Denmark",
+    "Dominica": "Dominica",
+    "Ecuador": "Ecuador",
+    "Egipto": "Egypt",
+    "El Salvador": "El Salvador",
+    "Emiratos Árabes Unidos": "United Arab Emirates",
+    "Eritrea": "Eritrea",
+    "Eslovaquia": "Slovakia",
+    "Eslovenia": "Slovenia",
+    "España": "Spain",
+    "Estados Unidos": "United States",
+    "Estonia": "Estonia",
+    "Etiopía": "Ethiopia",
+    "Fiji": "Fiji",
+    "Filipinas": "Philippines",
+    "Finlandia": "Finland",
+    "Francia": "France",
+    "Gabón": "Gabon",
+    "Gambia": "Gambia",
+    "Georgia": "Georgia",
+    "Ghana": "Ghana",
+    "Granada": "Grenada",
+    "Grecia": "Greece",
+    "Guatemala": "Guatemala",
+    "Guinea": "Guinea",
+    "Guinea-Bisáu": "Guinea-Bissau",
+    "Guinea Ecuatorial": "Equatorial Guinea",
+    "Guyana": "Guyana",
+    "Haití": "Haiti",
+    "Honduras": "Honduras",
+    "Hungría": "Hungary",
+    "India": "India",
+    "Indonesia": "Indonesia",
+    "Irak": "Iraq",
+    "Irán": "Iran",
+    "Irlanda": "Ireland",
+    "Islandia": "Iceland",
+    "Islas Marshall": "Marshall Islands",
+    "Islas Salomón": "Solomon Islands",
+    "Israel": "Israel",
+    "Italia": "Italy",
+    "Jamaica": "Jamaica",
+    "Japón": "Japan",
+    "Jordania": "Jordan",
+    "Kazajistán": "Kazakhstan",
+    "Kenia": "Kenya",
+    "Kirguistán": "Kyrgyzstan",
+    "Kiribati": "Kiribati",
+    "Kuwait": "Kuwait",
+    "Laos": "Laos",
+    "Lesoto": "Lesotho",
+    "Letonia": "Latvia",
+    "Líbano": "Lebanon",
+    "Liberia": "Liberia",
+    "Libia": "Libya",
+    "Liechtenstein": "Liechtenstein",
+    "Lituania": "Lithuania",
+    "Luxemburgo": "Luxembourg",
+    "Madagascar": "Madagascar",
+    "Malasia": "Malaysia",
+    "Malaui": "Malawi",
+    "Maldivas": "Maldives",
+    "Malí": "Mali",
+    "Malta": "Malta",
+    "Marruecos": "Morocco",
+    "Mauricio": "Mauritius",
+    "Mauritania": "Mauritania",
+    "México": "Mexico",
+    "Micronesia": "Micronesia",
+    "Moldavia": "Moldova",
+    "Mónaco": "Monaco",
+    "Mongolia": "Mongolia",
+    "Montenegro": "Montenegro",
+    "Mozambique": "Mozambique",
+    "Namibia": "Namibia",
+    "Nauru": "Nauru",
+    "Nepal": "Nepal",
+    "Nicaragua": "Nicaragua",
+    "Níger": "Niger",
+    "Nigeria": "Nigeria",
+    "Noruega": "Norway",
+    "Nueva Zelanda": "New Zealand",
+    "Omán": "Oman",
+    "Países Bajos": "Netherlands",
+    "Pakistán": "Pakistan",
+    "Palaos": "Palau",
+    "Panamá": "Panama",
+    "Papúa Nueva Guinea": "Papua New Guinea",
+    "Paraguay": "Paraguay",
+    "Perú": "Peru",
+    "Polonia": "Poland",
+    "Portugal": "Portugal",
+    "Reino Unido": "United Kingdom",
+    "República Centroafricana": "Central African Republic",
+    "República Checa": "Czech Republic",
+    "República del Congo": "Republic of the Congo",
+    "República Democrática del Congo": "Democratic Republic of the Congo",
+    "República Dominicana": "Dominican Republic",
+    "Ruanda": "Rwanda",
+    "Rumania": "Romania",
+    "Rusia": "Russia",
+    "Samoa": "Samoa",
+    "San Cristóbal y Nieves": "Saint Kitts and Nevis",
+    "San Marino": "San Marino",
+    "San Vicente y las Granadinas": "Saint Vincent and the Grenadines",
+    "Santa Lucía": "Saint Lucia",
+    "Santo Tomé y Príncipe": "Sao Tome and Principe",
+    "Senegal": "Senegal",
+    "Serbia": "Serbia",
+    "Seychelles": "Seychelles",
+    "Sierra Leona": "Sierra Leone",
+    "Singapur": "Singapore",
+    "Siria": "Syria",
+    "Somalia": "Somalia",
+    "Sri Lanka": "Sri Lanka",
+    "Suazilandia": "Eswatini",
+    "Sudáfrica": "South Africa",
+    "Sudán": "Sudan",
+    "Sudán del Sur": "South Sudan",
+    "Suecia": "Sweden",
+    "Suiza": "Switzerland",
+    "Surinam": "Suriname",
+    "Tailandia": "Thailand",
+    "Tanzania": "Tanzania",
+    "Tayikistán": "Tajikistan",
+    "Timor Oriental": "East Timor",
+    "Togo": "Togo",
+    "Tonga": "Tonga",
+    "Trinidad y Tobago": "Trinidad and Tobago",
+    "Túnez": "Tunisia",
+    "Turkmenistán": "Turkmenistan",
+    "Turquía": "Turkey",
+    "Tuvalu": "Tuvalu",
+    "Ucrania": "Ukraine",
+    "Uganda": "Uganda",
+    "Uruguay": "Uruguay",
+    "Uzbekistán": "Uzbekistan",
+    "Vanuatu": "Vanuatu",
+    "Venezuela": "Venezuela",
+    "Vietnam": "Vietnam",
+    "Yemen": "Yemen",
+    "Yibuti": "Djibouti",
+    "Zambia": "Zambia",
+    "Zimbabue": "Zimbabwe"
+}
 ######
 ######
 ######
@@ -269,6 +478,26 @@ decades=[
     { 'label':"20's",'value':"20's"}
 ]
 
+type_input= html.Div([
+    dbc.Row([
+        dbc.Col(
+            dbc.Input(id='input_country',
+                      placeholder='Escriba un país...'
+                    , type='text'
+                                  )
+            )
+        
+    ])
+    , html.Br()
+    , dbc.Row([dbc.Col(
+            id='map'
+        )])
+  
+])
+
+map_countries=html.Div([
+    
+])
 Acc=html.Div([
             dbc.Row([
                 dbc.Col([
@@ -289,6 +518,11 @@ Acc=html.Div([
                         )
                     ,html.Br()
                     ,dcc.Graph(id='barchart')  ])])
+                    ,html.Br()
+                    ,type_input
+                    ,html.Br()
+                    
+                    
         ])
 
 layout = html.Div([
@@ -375,8 +609,9 @@ def update_linechart(range_s,b1,b2):
             YearsChoseByUser.append(gb_year_month[gb_year_month['year']==y])
         
         total=pd.concat(YearsChoseByUser)
-        total.sort_values(by='year', inplace=True, ascending=True)
-        total.sort_values(by='month', key=lambda x: pd.Categorical(x, categories=monthsSorted, ordered=True),inplace=True )
+        #total.sort_values(by='year', inplace=True, ascending=True)
+        #total.sort_values(by='month', key=lambda x: pd.Categorical(x, categories=monthsSorted, ordered=True),inplace=True )
+        total.sort_values(by=['year', 'month'], ascending=[True, True], inplace=True, key=lambda x: pd.Categorical(x, categories=monthsSorted, ordered=True))
         totalFatXyear=sum_columnXyear(total,'fatalities',monthsSorted)    
         s=total.groupby('month')['fatalities'].transform('sum')
         total['sumXmonth']=s
@@ -435,8 +670,9 @@ def update_linechart(range_s,b1,b2):
             YearsChoseByUser.append(gb_year_month[gb_year_month['year']==y])
         
         total=pd.concat(YearsChoseByUser)
-        total.sort_values(by='year', inplace=True, ascending=True)
-        total.sort_values(by='month', key=lambda x: pd.Categorical(x, categories=monthsSorted, ordered=True),inplace=True )
+        #total.sort_values(by='year', inplace=True, ascending=True)
+        #total.sort_values(by='month', key=lambda x: pd.Categorical(x, categories=monthsSorted, ordered=True),inplace=True )
+        total.sort_values(by=['year', 'month'], ascending=[True, True], inplace=True, key=lambda x: pd.Categorical(x, categories=monthsSorted, ordered=True))
         AllYearsAccidents={month: 0 for month in monthsSorted}
         for month in total['month'].unique():
             value=total['cat'][total['month']==month].sum()
@@ -498,6 +734,82 @@ def update_linechart(range_s,b1,b2):
         fig2.update_traces(textfont_color='white')       
     
     return fig,fig2
+
+
+
+'''@app.callback(
+    Output('map','children'),
+    Input('decadesDropdown', 'value')
+)
+
+def show_map(value):
+    for dec in ["70's","80's","90's","00's","10's","20's"]:
+        if (value==dec):
+            if (dec!="20's"):
+                year_start= int(dec.replace("'s",""))
+                century=1900
+                if year_start in [0,10]:
+                    century=2000
+                year_start+=century
+                year_finish=year_start+9              
+            else:
+                year_start=2020
+                year_finish=2023
+            m=folium.Map()
+            for lat,lon,fat,loc in zip( df_coordinates.Latitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.Longitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.fatalities[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.location[df_coordinates['year'].between(year_start,year_finish)] ):
+                if fat==0:
+                    plane_icon_url ='Bplane.png'
+                    folium.Marker(
+                    [lat,lon], popup=f'<i>{loc}</i>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
+                else:
+                    plane_icon_url= 'Yplane.png'
+                    folium.Marker(
+                    [lat,lon], popup=f'<i>{loc}</i> \n \n <b>Descesos:{int(fat)}</b>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
+            m_html= m.get_root().render()
+            return html.Iframe(srcDoc=m_html, width="100%", height=500)'''
+                          
+@app.callback(
+    Output('map','children'),
+    Input('decadesDropdown', 'value'),
+    Input('input_country','value')
+    
+)
+
+def zoomin_country(value_dr,value_in):
+    for dec in ["70's","80's","90's","00's","10's","20's"]:
+        if (value_dr==dec):
+            if (dec!="20's"):
+                year_start= int(dec.replace("'s",""))
+                century=1900
+                if year_start in [0,10]:
+                    century=2000
+                year_start+=century
+                year_finish=year_start+9              
+            else:
+                year_start=2020
+                year_finish=2023
+            m=folium.Map()
+            for lat,lon,fat,loc in zip( df_coordinates.Latitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.Longitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.fatalities[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.location[df_coordinates['year'].between(year_start,year_finish)] ):
+                if fat==0:
+                    plane_icon_url ='DashboardAereo\pages\Bplane.png'
+                    folium.Marker(
+                    [lat,lon], popup=f'<i>{loc}</i>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
+                else:
+                    plane_icon_url= 'DashboardAereo\pages\Yplane.png'
+                    folium.Marker(
+                    [lat,lon], popup=f'<i>{loc}</i> \n \n <b>Descesos:{int(fat)}</b>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
+    if value_in in country_dict:
+        for name,bound in zip(admin_names,geometries):
+            value_english=country_dict[value_in]
+            if name==value_english:
+                for boun in bound:
+                    for cor in boun:
+                        for c in cor:
+                            cor_ordered=[c[1],c[0]]
+                            coor.append(tuple(cor_ordered))
+        m.fit_bounds(coor)
+    m_html= m.get_root().render()
+    return html.Iframe(srcDoc=m_html, width="100%", height=500)
 
 if __name__ == "__main__":
     app.run_server(debug=True)
