@@ -75,11 +75,14 @@ normdf = pd.concat([numacc_bycat.cat,numacc_bycat.registration,numfatbycat.fatal
 normdf['fatality_rate']= (normdf.fatalities/normdf.registration)
 
 #GRAPHIC (bar chart)
-px.bar(normdf, x = 'cat', y = 'fatality_rate',title = "Tasa de fatalidad por categoria", labels={
+fig2= px.bar(normdf, x = 'cat', y = 'fatality_rate',title = "Tasa de fatalidad por categoria", labels={
                      "fatality_rate": "Tasa de fatalidad",
                      "cat": "Categorías"
                  })
 
+yearss = dfnan['year'].unique()
+yearss = yearss[~np.isnan(yearss)]
+print(yearss)
 
 layout = html.Div([
     dbc.Container([
@@ -94,19 +97,22 @@ layout = html.Div([
             dbc.Col(html.P("Categoría: ")),
             dcc.Dropdown(
         id='dropdownCat',
-        options=[{'cate': c, 'value': c} for c in dfnan['cat']],
+        options=[{'label': c, 'value': c} for c in np.sort(dfnan['cat'].unique())],
         value = dfnan['cat'][0])
-        ]),
+        ]),dbc.Row([]),
         dbc.Row([
             dbc.Col(html.P("Año: ")),
             dcc.Dropdown(
         id='dropdownY',
-        options=[{'year': y, 'value': y} for y in dfnan['year']],
+        options= yearss,
         value = dfnan['year'][0])
         ])
     ]),
     dbc.Container([
         dcc.Graph('bar-chart')
+    ]),
+    dbc.Container([
+        dcc.Graph(figure = fig2)
     ])
     ])
 

@@ -242,7 +242,8 @@ for value,month in zip(totalFatXyear,total['month'].unique()):
 fig.update_layout(autosize=False, width=950)
 fig.update_traces(textfont_color='white')'''
 
-df_coordinates=pd.read_csv('DashboardAereo\pages\coordinates.csv')
+df_coordinates=pd.read_csv('DashboardAereo/pages/coordinates.csv')
+
 df_coordinates.dropna(inplace=True)
 
 countries_geometries= 'https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson'
