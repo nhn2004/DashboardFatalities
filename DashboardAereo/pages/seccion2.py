@@ -75,16 +75,19 @@ normdf = pd.concat([numacc_bycat.cat,numacc_bycat.registration,numfatbycat.fatal
 normdf['fatality_rate']= (normdf.fatalities/normdf.registration)
 
 #GRAPHIC (bar chart)
-px.bar(normdf, x = 'cat', y = 'fatality_rate',title = "Tasa de fatalidad por categoria", labels={
+fig2= px.bar(normdf, x = 'cat', y = 'fatality_rate',title = "Tasa de fatalidad por categoria", labels={
                      "fatality_rate": "Tasa de fatalidad",
                      "cat": "Categorías"
                  })
 
+yearss = dfnan['year'].unique()
+yearss = yearss[~np.isnan(yearss)]
+print(yearss)
 
 layout = html.Div([
     dbc.Container([
         dbc.Row([
-            dbc.Col(html.H1("Causas comunes de accidentes", className="text-center")
+            dbc.Col(html.H1("Categorías de accidentes", className="text-center")
                     , className="mb-5 mt-5")
         ]),
         dbc.Row([]),
@@ -94,27 +97,33 @@ layout = html.Div([
             dbc.Col(html.P("Categoría: ")),
             dcc.Dropdown(
         id='dropdownCat',
-        options=[{'cate': cat, 'value': cat} for cat in dfnan['cat']],
-        cat = dfnan['cat'][0])
-        ]),
+        options=[{'label': c, 'value': c} for c in np.sort(dfnan['cat'].unique())],
+        value = dfnan['cat'][0])
+        ]),dbc.Row([]),
         dbc.Row([
-            dbc.Col(html.P("Nivel del accidente: ")),
+            dbc.Col(html.P("Año: ")),
             dcc.Dropdown(
         id='dropdownY',
-        options=[{'cate': cat, 'value': cat} for cat in dfnan['year']],
-        yearCat = dfnan['year'][0])
-        ]),
+        options= yearss,
+        value = dfnan['year'][0])
+        ])
+    ]),
+    dbc.Container([
+        dcc.Graph('bar-chart')
+    ]),
+    dbc.Container([
+        dcc.Graph(figure = fig2)
     ])
-])
+    ])
 
 @app.callback(
     dash.dependencies.Output('bar-chart', 'figure'),
     [dash.dependencies.Input('dropdownCat', 'value'),
-     dash.dependencies.Input('dropdownY','year')]
+     dash.dependencies.Input('dropdownY','value')]
     )
 
-def update_bar_chart(category,yearCat):
-    filtered_df = dfnan[dfnan['cat'] == category] 
+def update_bar_chart(AccidentCat,yearCat):
+    filtered_df = dfnan[dfnan['cat'] == AccidentCat] 
     filtered1_df = filtered_df[filtered_df['year'] == yearCat]  #Filtrar el DataFrame según la categoría seleccionada
     fig = px.histogram(filtered1_df, x = 'month', title = 'Número de accidentes anuales por categoría',labels={
                      "count": "Número de accidentes",
