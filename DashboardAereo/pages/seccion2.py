@@ -66,10 +66,7 @@ año = 2001
 catdf = dfnan[dfnan.cat == typeaccident + lossordamage]
 
 #GRAPHIC
-px.histogram(catdf[catdf.year == año], x = 'month', title = 'Número de accidentes anuales por categoría',labels={
-                     "count": "Número de accidentes",
-                     "month": "Meses"
-                 })
+
 
 numfatbycat = topfatalities.groupby('cat').sum().reset_index()
 numacc_bycat = topfatalities.groupby('cat').count().reset_index()
@@ -90,5 +87,42 @@ layout = html.Div([
             dbc.Col(html.H1("Causas comunes de accidentes", className="text-center")
                     , className="mb-5 mt-5")
         ]),
+        dbc.Row([]),
+    ])
+    ,dbc.Container([
+        dbc.Row([
+            dbc.Col(html.P("Categoría: ")),
+            dcc.Dropdown(
+        id='dropdownCat',
+        options=[{'cate': cat, 'value': cat} for cat in dfnan['cat']],
+        cat = dfnan['cat'][0])
+        ]),
+        dbc.Row([
+            dbc.Col(html.P("Nivel del accidente: ")),
+            dcc.Dropdown(
+        id='dropdownY',
+        options=[{'cate': cat, 'value': cat} for cat in dfnan['year']],
+        yearCat = dfnan['year'][0])
+        ]),
     ])
 ])
+
+@app.callback(
+    dash.dependencies.Output('bar-chart', 'figure'),
+    [dash.dependencies.Input('dropdownCat', 'value'),
+     dash.dependencies.Input('dropdownY','year')]
+    )
+
+def update_bar_chart(category,yearCat):
+    filtered_df = dfnan[dfnan['cat'] == category] 
+    filtered1_df = filtered_df[filtered_df['year'] == yearCat]  #Filtrar el DataFrame según la categoría seleccionada
+    fig = px.histogram(filtered1_df, x = 'month', title = 'Número de accidentes anuales por categoría',labels={
+                     "count": "Número de accidentes",
+                     "month": "Meses"
+                 })
+    return fig
+
+
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
