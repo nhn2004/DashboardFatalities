@@ -314,7 +314,7 @@ country_dict = {
     "Eslovaquia": "Slovakia",
     "Eslovenia": "Slovenia",
     "España": "Spain",
-    "Estados Unidos": "United States of America",
+    "Estados Unidos de America": "United States of America",
     "Estonia": "Estonia",
     "Etiopía": "Ethiopia",
     "Fiji": "Fiji",
@@ -482,7 +482,7 @@ type_input= html.Div([
     dbc.Row([
         dbc.Col(
             dbc.Input(id='input_country',
-                      placeholder='Escriba un país...'
+                      placeholder='Escriba un país (en español)...'
                     , type='text'
                                   )
             )
@@ -495,9 +495,39 @@ type_input= html.Div([
   
 ])
 
+stations={'Primavera':['MAR','APR','MAY'],'Verano':['JUN','JUL','AUG'],'Otoño':['OCT','SEP','NOV'],'Invierno':['DEC','JAN','FEB']}
 map_countries=html.Div([
-    
-])
+    dbc.Row([
+        dbc.Col(
+            [dbc.Switch(
+                    id="swPr",
+                    label='Primavera',
+                    value=False,)
+                ,dcc.Checklist(id='checklistPr',options= stations['Primavera'],value=[])]
+            )
+        ,dbc.Col([
+            dbc.Switch(
+                    id="swVe",
+                    label='Verano',
+                    value=False)
+                ,dcc.Checklist(id='checklistVe',options= stations['Verano'],value=[])
+            ])
+        ,dbc.Col([
+            dbc.Switch(
+                    id="swOt",
+                    label='Otoño',
+                    value=False)
+                ,dcc.Checklist(id='checklistOt',options= stations["Otoño"],value=[])
+            ])
+        ,dbc.Col([
+            dbc.Switch(
+                    id="swIn",
+                    label='Invierno',
+                    value=False)
+                ,dcc.Checklist(id='checklistIn',options= stations['Invierno'],value=[])
+            ])   
+])])
+
 Acc=html.Div([
             dbc.Row([
                 dbc.Col([
@@ -521,6 +551,7 @@ Acc=html.Div([
                     ,html.Br()
                     ,type_input
                     ,html.Br()
+                    ,map_countries
                     
                     
         ])
@@ -624,12 +655,12 @@ def update_linechart(range_s,b1,b2):
 
         fig.update_traces(line=dict(dash='dash'),)
         fig.update_layout(
-            yaxis_title='N. of fatalities',
+            yaxis_title='Número de decesos',
             xaxis_title = None
-            ,title= 'Fatilities Count per Month'
+            ,title= 'Número de decesos por meses'
             , grid_columns = 1, grid_rows = 2)
         a=-1
-        list_colors=['blue','red','orange','white'] #Los colores los pone Nahin
+        list_colors=['blue','red','green','violet','orange','lightblue','pink','lightgreen','brown','yellow'] 
         for y in np.sort(total.year.unique()):
             a+=1
             
@@ -695,7 +726,7 @@ def update_linechart(range_s,b1,b2):
             ,title= 'Número de accidentes por meses'
             , grid_columns = 1, grid_rows = 2)
         a=-1
-        list_colors=['blue','red','orange','white'] #Los colores los pone Nahin
+        list_colors=['blue','red','green','violet','orange','lightblue','pink','lightgreen','brown','yellow'] 
         for y in np.sort(total.year.unique()):
             a+=1
             
@@ -767,7 +798,28 @@ def show_map(value):
                     [lat,lon], popup=f'<i>{loc}</i> \n \n <b>Descesos:{int(fat)}</b>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
             m_html= m.get_root().render()
             return html.Iframe(srcDoc=m_html, width="100%", height=500)'''
-                          
+@app.callback(
+    Output("checklistPr", "style"),
+    Output("checklistVe", "style"),
+    Output("checklistOt", "style"),
+    Output("checklistIn", "style"),
+    Input("swPr", "value"),
+    Input("swVe", "value"),
+    Input("swOt", "value"),
+    Input("swIn", "value")
+)
+def toggle_checklist(on_pr, on_ve, on_ot, on_in):
+    checklist_styles = [{"display": "none"}] * 4
+    if on_pr:
+        checklist_styles[0] = {"display": "block"}
+    if on_ve:
+        checklist_styles[1] = {"display": "block"}
+    if on_ot:
+        checklist_styles[2] = {"display": "block"}
+    if on_in:
+        checklist_styles[3] = {"display": "block"}
+    return checklist_styles  
+                        
 @app.callback(
     Output('map','children'),
     Input('decadesDropdown', 'value'),
@@ -790,15 +842,15 @@ def zoomin_country(value_dr,enter,value_in):
                 year_start=2020
                 year_finish=2023
             m=folium.Map()
-            for lat,lon,fat,loc in zip( df_coordinates.Latitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.Longitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.fatalities[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.location[df_coordinates['year'].between(year_start,year_finish)] ):
+            for lat,lon,fat,loc,year,month in zip( df_coordinates.Latitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.Longitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.fatalities[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.location[df_coordinates['year'].between(year_start,year_finish)],df_coordinates.year[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.month[df_coordinates['year'].between(year_start,year_finish)] ):
                 if fat==0:
                     plane_icon_url ='DashboardAereo\pages\Bplane.png'
                     folium.Marker(
-                    [lat,lon], popup=f'<i>{loc}</i>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
+                    [lat,lon], popup=f'<i>{loc}</i>\n\nAño-Mes:\n<b>{int(year)}-{month}</b>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
                 else:
                     plane_icon_url= 'DashboardAereo\pages\Yplane.png'
                     folium.Marker(
-                    [lat,lon], popup=f'<i>{loc}</i> \n \n <b>Descesos:{int(fat)}</b>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
+                    [lat,lon], popup=f'<i>{loc}</i>\n\nDescesos:<b>{int(fat)}</b>\nAño-Mes:<b>\n{int(year)}-{month}</b> ',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
     if enter is not None:
         fzcountry,fzscore=process.extractOne(value_in, country_dict.keys(), scorer=fuzz.ratio)
         for name,bound in zip(admin_names,geometries):

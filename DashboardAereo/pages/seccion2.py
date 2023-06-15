@@ -1,4 +1,4 @@
-import pandas as pd
+'''import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sn
@@ -125,4 +125,4 @@ def update_bar_chart(category,yearCat):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True)'''
