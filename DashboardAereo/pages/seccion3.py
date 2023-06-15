@@ -501,13 +501,13 @@ map_countries=html.Div([
 Acc=html.Div([
             dbc.Row([
                 dbc.Col([
-                    html.P('Decades:')
+                    html.P('Décadas:')
                     ,dcc.Dropdown(
                      options=decades, id='decadesDropdown', value="20's"
                     )
                     ,html.Br()
                     ,dcc.Graph(id='linechart')
-                    ,html.P('Years:')
+                    ,html.P('Años:')
                     ,dcc.RangeSlider(
                         id='range-slider',
                         min=1970,
@@ -648,7 +648,7 @@ def update_linechart(range_s,b1,b2):
             fig.add_annotation(x=month, y=val, text=f'{tipo.upper()}',align='center',showarrow=False)
 
         table = go.Table(
-                header = dict(values=['MEAN',' MEDIAN']),
+                header = dict(values=['MEDIA',' MEDIANA']),
                 cells =  dict(values=[[round(total['fatalities'].mean(),2)],[total['fatalities'].median()]]))
                     
         fig.add_trace(table, row = 2, col = 1)
@@ -659,9 +659,9 @@ def update_linechart(range_s,b1,b2):
             value=int(value)
             fig2.add_annotation(x=month,y=value+0.1*value,text=f'total:{value}', font={'size':12 ,'color':'blue'}, textangle=0,showarrow=False,align='center',opacity=1)
         fig2.update_layout(autosize=False, width=1100,
-            yaxis_title='N. of fatalities',
-            xaxis_title = 'Months',
-            title= 'Fatalities Count per Month')
+            yaxis_title='Número de decesos',
+            xaxis_title = 'Meses',
+            title= 'Decesos por mes')
         fig2.update_traces(textfont_color='white')    
         
     elif b2==True:
@@ -690,9 +690,9 @@ def update_linechart(range_s,b1,b2):
 
         fig.update_traces(line=dict(dash='dash'),)
         fig.update_layout(
-            yaxis_title='N. of accidents',
+            yaxis_title='Número de accidentes',
             xaxis_title = None
-            ,title= 'Accidents Count per Month'
+            ,title= 'Número de accidentes por meses'
             , grid_columns = 1, grid_rows = 2)
         a=-1
         list_colors=['blue','red','orange','white'] #Los colores los pone Nahin
@@ -714,7 +714,7 @@ def update_linechart(range_s,b1,b2):
             fig.add_annotation(x=month, y=val, text=f'{tipo.upper()}',align='center',showarrow=False)
 
         table = go.Table(
-                header = dict(values=['MEAN',' MEDIAN']),
+                header = dict(values=['MEDIA',' MEDIANA']),
                 cells =  dict(values=[[round(total['cat'].mean(),2)],[total['cat'].median()]]))
                     
         fig.add_trace(table, row = 2, col = 1)
@@ -728,9 +728,9 @@ def update_linechart(range_s,b1,b2):
             value=int(value)
             fig2.add_annotation(x=month,y=value+2.5,text=f'total:{value}', font={'size':12 ,'color':'blue'}, textangle=0,showarrow=False,align='center',opacity=1)
         fig2.update_layout(autosize=False, width=1100,
-            yaxis_title='N. of accidents',
-            xaxis_title = 'Months',
-            title= 'Accidents Count per Month')
+            yaxis_title='Número de accidents',
+            xaxis_title = 'Meses',
+            title= 'Número de accidentes por mes')
         fig2.update_traces(textfont_color='white')       
     
     return fig,fig2
