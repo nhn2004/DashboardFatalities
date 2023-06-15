@@ -36,10 +36,49 @@ layout = html.Div([
                 ],style={"display":"flex","justify-content":"center"}),
             ], style={'margin-top':'30px'})
         ]),
+        html.Div(
+    className="innertube",
+    children=[
+        html.H1(className="text-center", children="Categorías de accidentes:", style={"margin-top":"60px"}),
+        html.P(
+            children=[
+                html.Br(),
+                html.Div([
+                    html.P([
+                        "A = Accidente",
+                        html.Br(),
+                        "I = Incidente",
+                        html.Br(),
+                        "H = Secuestro",
+                        html.Br(),
+                        "C = Suceso criminal (sabotaje, derribo)",
+                        html.Br(),
+                        "O = Otro suceso (incendio en tierra, sabotaje)",
+                        html.Br(),
+                        "U = Tipo de suceso desconocido",
+                        html.Br(),
+                        html.Br(),
+                        "1 = Pérdida total",
+                        html.Br(),
+                        "2 = Daño reparable"
+                    ],style={'font-size':'1.1em'})
+                ])    
+            ]
+        ),
+        
+        html.P(
+            children=[
+                "Por ejemplo, la categoría A1 significa un Accidente con pérdida total del avión.Para más información sobre las definiciones de Accidente, Incidente, etc., consulte las ",
+                html.A(href="/about/ASN-standards.doc", children="Normas utilizadas en aviation-safety.net (ASN)"),
+                " (MS Word)"
+            ]
+        ),
+    ]),
+            
         html.Div([
             dbc.Row([
                 html.H1("Colaboradores" , className="text-center")
-            ], style={'margin-top':'50px'}),
+            ], style={'margin-top':'70px'}),
             html.Div([
                 dbc.Col([
                     html.Div([
