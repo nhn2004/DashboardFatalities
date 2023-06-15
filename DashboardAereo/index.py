@@ -9,7 +9,7 @@ import dash_bootstrap_components as dbc
 
 from app import server
 from app import app
-from pages import  home, seccion1, seccion2, seccion3, seccion4, about
+from pages import  home, seccion1, seccion2, seccion3, about
 
 # building the navigation bar
 # https://github.com/facultyai/dash-bootstrap-components/blob/master/examples/advanced-component-usage/Navbars.py
@@ -19,7 +19,7 @@ dropdown = dbc.DropdownMenu(
         dbc.DropdownMenuItem("Introducción y datos principales", href="/seccion1"),
         dbc.DropdownMenuItem("Causas comunes de accidentes", href="/seccion2"),
         dbc.DropdownMenuItem("Patrones geográficos y temporales", href="/seccion3"),
-        dbc.DropdownMenuItem("Modelos de aviones involucrados", href="/seccion4"),
+        # dbc.DropdownMenuItem("Modelos de aviones involucrados", href="/seccion4"),
     ],
     nav = True,
     in_navbar = True,
@@ -169,7 +169,7 @@ footer= dbc.Container(
                     dbc.Col(
                         html.P(
                             [
-                                html.Span("Investigacion sobre los accidentes quese han reportado desde 1961", className="mobile-break"),
+                                html.Span("Investigación sobre los accidentes que se han reportado desde 1970.", className="mobile-break"),
                                 
                             ]
                         ),
@@ -194,7 +194,7 @@ footer= dbc.Container(
                     dbc.Col(
                         dbc.Container(
                         [
-                            html.H4("Contactanos:",style={"color":"white"}),
+                            html.H4("Contáctanos:",style={"color":"white"}),
                     #         dbc.Nav(
                     
                             dbc.Nav(
@@ -310,8 +310,8 @@ def display_page(pathname):
         return seccion2.layout
     elif pathname == '/seccion3':
         return seccion3.layout
-    elif pathname == '/seccion4':
-        return seccion4.layout
+    # elif pathname == '/seccion4':
+    #     return seccion4.layout
     elif pathname == '/about':
         return about.layout
     

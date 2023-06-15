@@ -61,11 +61,11 @@ topfatalities.year = topfatalities.year.astype(dtype = "float")
 top10fatal = topfatalities.sort_values("fatalities", ascending = False).head(10)
 
 #GRAPHIC
-#fig = px.bar(top10fatal,title = 'Los 10 vuelos con mayor número de decesos', y = 'registration', x = 'fatalities', orientation = "h", hover_name = "date",color = 'fatalities',color_continuous_scale='Inferno',hover_data=["type", "country"])
+figtop = px.bar(top10fatal,title = 'Los 10 vuelos con mayor número de decesos', y = 'registration', x = 'fatalities', orientation = "h", hover_name = "date",color = 'fatalities',color_continuous_scale='Inferno',hover_data=["type", "country"])
 
 top10planes = df.groupby('type').count().sort_values('registration',ascending=False).head(10).reset_index()
 #GRAPHIC
-#px.bar(top10planes, x = 'registration', y = 'type', title = 'Los 10 modelos de aviones más involucrados en accidentes', orientation = 'h',color = 'registration',color_continuous_scale='Cividis_r')
+figtopplanes=px.bar(top10planes, x = 'registration', y = 'type', title = 'Los 10 modelos de aviones más involucrados en accidentes', orientation = 'h',color = 'registration',color_continuous_scale='Cividis_r')
 
 
 layout = html.Div([
@@ -74,5 +74,21 @@ layout = html.Div([
             dbc.Col(html.H1("Introducción y datos principales", className="text-center")
                     , className="mb-5 mt-5")
         ]),
+        html.Div([
+            dbc.Row([
+                html.H3("Top 10 Vuelos con más Decesos")
+            ]),
+            dcc.Graph(figure= figtop, id="top-10-fatal")
+        ]),
+        html.Br(),
+        html.Div([
+            dbc.Row([
+                html.H3("Top 10 Tipos de Aviones con más Accidentes")
+            ]),
+            dcc.Graph(figure=figtopplanes, id="top-10-planes")
+
+        ])
+        
+
     ])
 ])
