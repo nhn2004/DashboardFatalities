@@ -17,7 +17,7 @@ dropdown = dbc.DropdownMenu(
     children=[
         # dbc.DropdownMenuItem("Inicio", href="/home"),
         dbc.DropdownMenuItem("Introducción y datos principales", href="/seccion1"),
-        dbc.DropdownMenuItem("Causas comunes de accidentes", href="/seccion2"),
+        dbc.DropdownMenuItem("Categorías de accidentes", href="/seccion2"),
         dbc.DropdownMenuItem("Patrones geográficos y temporales", href="/seccion3"),
         # dbc.DropdownMenuItem("Modelos de aviones involucrados", href="/seccion4"),
     ],

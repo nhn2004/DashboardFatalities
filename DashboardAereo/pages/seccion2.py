@@ -87,7 +87,7 @@ print(yearss)
 layout = html.Div([
     dbc.Container([
         dbc.Row([
-            dbc.Col(html.H1("Causas comunes de accidentes", className="text-center")
+            dbc.Col(html.H1("Categorías de accidentes", className="text-center")
                     , className="mb-5 mt-5")
         ]),
         dbc.Row([]),
