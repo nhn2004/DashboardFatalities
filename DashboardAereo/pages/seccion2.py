@@ -94,18 +94,21 @@ layout = html.Div([
             dbc.Col(html.P("Categoría: ")),
             dcc.Dropdown(
         id='dropdownCat',
-        options=[{'cate': cat, 'value': cat} for cat in dfnan['cat']],
-        cat = dfnan['cat'][0])
+        options=[{'cate': c, 'value': c} for c in dfnan['cat']],
+        AccidentCat = dfnan['cat'][0])
         ]),
         dbc.Row([
-            dbc.Col(html.P("Nivel del accidente: ")),
+            dbc.Col(html.P("Año: ")),
             dcc.Dropdown(
         id='dropdownY',
-        options=[{'cate': cat, 'value': cat} for cat in dfnan['year']],
+        options=[{'year': y, 'value': y} for y in dfnan['year']],
         yearCat = dfnan['year'][0])
-        ]),
+        ])
+    ]),
+    dbc.Container([
+        dcc.Graph('bar-chart')
     ])
-])
+    ])
 
 @app.callback(
     dash.dependencies.Output('bar-chart', 'figure'),
@@ -113,8 +116,8 @@ layout = html.Div([
      dash.dependencies.Input('dropdownY','year')]
     )
 
-def update_bar_chart(category,yearCat):
-    filtered_df = dfnan[dfnan['cat'] == category] 
+def update_bar_chart(AccidentCat,yearCat):
+    filtered_df = dfnan[dfnan['cat'] == AccidentCat] 
     filtered1_df = filtered_df[filtered_df['year'] == yearCat]  #Filtrar el DataFrame según la categoría seleccionada
     fig = px.histogram(filtered1_df, x = 'month', title = 'Número de accidentes anuales por categoría',labels={
                      "count": "Número de accidentes",
