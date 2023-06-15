@@ -1,4 +1,4 @@
-'''import pandas as pd
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sn
@@ -59,11 +59,12 @@ topfatalities.fatalities = topfatalities.fatalities.astype(dtype = "float")
 topfatalities.year = topfatalities.year.astype(dtype = "float")
 
 #DASH SCROLLDOWNS
-typeaccident = "H"
-lossordamage = "1"
-año = 2001
+#typeaccident = "H"
+#lossordamage = "1"
+#año = 2001
 #FILTER
-catdf = dfnan[dfnan.cat == typeaccident + lossordamage]
+#catdf = dfnan[dfnan.cat == typeaccident + lossordamage]
+
 
 #GRAPHIC
 
@@ -81,8 +82,7 @@ fig2= px.bar(normdf, x = 'cat', y = 'fatality_rate',title = "Tasa de fatalidad p
                  })
 
 yearss = dfnan['year'].unique()
-yearss = yearss[~np.isnan(yearss)]
-print(yearss)
+yearss = yearss[yearss != np.nan][1:]
 
 layout = html.Div([
     dbc.Container([
@@ -98,14 +98,16 @@ layout = html.Div([
             dcc.Dropdown(
         id='dropdownCat',
         options=[{'label': c, 'value': c} for c in np.sort(dfnan['cat'].unique())],
-        value = dfnan['cat'][0])
-        ]),dbc.Row([]),
+        value = 'A1')
+        ]),
+        html.Br()
+        ,
         dbc.Row([
             dbc.Col(html.P("Año: ")),
             dcc.Dropdown(
         id='dropdownY',
         options= yearss,
-        value = dfnan['year'][0])
+        value = 1970)
         ])
     ]),
     dbc.Container([
@@ -132,6 +134,5 @@ def update_bar_chart(AccidentCat,yearCat):
     return fig
 
 
-
 if __name__ == '__main__':
-    app.run_server(debug=True)'''
+    app.run_server(debug=True)
