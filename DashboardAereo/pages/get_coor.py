@@ -1,4 +1,4 @@
-import pandas as pd
+'''import pandas as pd
 from geopy.geocoders import OpenCage
 
 geocoder = OpenCage('9f60422213fc4cb5a210e1f916c11c0f')
@@ -20,4 +20,4 @@ for index, row in locs_gb.iterrows():
     except:
         pass
  
-locs_gb.to_csv('coordinates.csv', index=True)
+locs_gb.to_csv('coordinates.csv', index=True)'''

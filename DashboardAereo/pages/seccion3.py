@@ -4,7 +4,7 @@ from plotly.subplots import make_subplots
 import folium
 import json
 import requests
-
+from fuzzywuzzy import fuzz,process
 
 import dash
 from dash import Dash, dcc, html
@@ -314,7 +314,7 @@ country_dict = {
     "Eslovaquia": "Slovakia",
     "Eslovenia": "Slovenia",
     "España": "Spain",
-    "Estados Unidos": "United States",
+    "Estados Unidos": "United States of America",
     "Estonia": "Estonia",
     "Etiopía": "Ethiopia",
     "Fiji": "Fiji",
@@ -771,11 +771,12 @@ def show_map(value):
 @app.callback(
     Output('map','children'),
     Input('decadesDropdown', 'value'),
-    Input('input_country','value')
+    Input('input_country','n_submit'),
+    State('input_country','value')
     
 )
 
-def zoomin_country(value_dr,value_in):
+def zoomin_country(value_dr,enter,value_in):
     for dec in ["70's","80's","90's","00's","10's","20's"]:
         if (value_dr==dec):
             if (dec!="20's"):
@@ -798,16 +799,19 @@ def zoomin_country(value_dr,value_in):
                     plane_icon_url= 'DashboardAereo\pages\Yplane.png'
                     folium.Marker(
                     [lat,lon], popup=f'<i>{loc}</i> \n \n <b>Descesos:{int(fat)}</b>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
-    if value_in in country_dict:
+    if enter is not None:
+        fzcountry,fzscore=process.extractOne(value_in, country_dict.keys(), scorer=fuzz.ratio)
         for name,bound in zip(admin_names,geometries):
-            value_english=country_dict[value_in]
-            if name==value_english:
+            if name==country_dict[fzcountry]:
+                coor=[]
                 for boun in bound:
                     for cor in boun:
                         for c in cor:
                             cor_ordered=[c[1],c[0]]
                             coor.append(tuple(cor_ordered))
-        m.fit_bounds(coor)
+                m.fit_bounds(coor)
+                break
+        enter=None
     m_html= m.get_root().render()
     return html.Iframe(srcDoc=m_html, width="100%", height=500)
 
