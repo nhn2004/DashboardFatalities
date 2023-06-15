@@ -95,14 +95,14 @@ layout = html.Div([
             dcc.Dropdown(
         id='dropdownCat',
         options=[{'cate': c, 'value': c} for c in dfnan['cat']],
-        AccidentCat = dfnan['cat'][0])
+        value = dfnan['cat'][0])
         ]),
         dbc.Row([
             dbc.Col(html.P("Año: ")),
             dcc.Dropdown(
         id='dropdownY',
         options=[{'year': y, 'value': y} for y in dfnan['year']],
-        yearCat = dfnan['year'][0])
+        value = dfnan['year'][0])
         ])
     ]),
     dbc.Container([
@@ -113,7 +113,7 @@ layout = html.Div([
 @app.callback(
     dash.dependencies.Output('bar-chart', 'figure'),
     [dash.dependencies.Input('dropdownCat', 'value'),
-     dash.dependencies.Input('dropdownY','year')]
+     dash.dependencies.Input('dropdownY','value')]
     )
 
 def update_bar_chart(AccidentCat,yearCat):
