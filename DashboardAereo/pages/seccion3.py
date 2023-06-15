@@ -804,6 +804,10 @@ def show_map(value):
     Output("checklistVe", "style"),
     Output("checklistOt", "style"),
     Output("checklistIn", "style"),
+    Output('checklistPr','value'),
+    Output('checklistVe','value'),
+    Output('checklistOt','value'),
+    Output('checklistIn','value'),
     Input("swPr", "value"),
     Input("swVe", "value"),
     Input("swOt", "value"),
@@ -811,25 +815,43 @@ def show_map(value):
 )
 def toggle_checklist(on_pr, on_ve, on_ot, on_in):
     checklist_styles = [{"display": "none"}] * 4
+
     if on_pr:
         checklist_styles[0] = {"display": "block"}
+        a=stations['Primavera']
+    elif not on_pr:
+        a=[]    
     if on_ve:
         checklist_styles[1] = {"display": "block"}
+        b=stations['Verano']
+    else: b=[]
     if on_ot:
         checklist_styles[2] = {"display": "block"}
+        c=stations["Otoño"]
+    else: c=[]
     if on_in:
         checklist_styles[3] = {"display": "block"}
-    return checklist_styles  
+        d=stations['Invierno']
+    else: d=[]
+    checklist_styles.append(a)
+    checklist_styles.append(b)
+    checklist_styles.append(c)
+    checklist_styles.append(d)
+    return checklist_styles
                         
 @app.callback(
     Output('map','children'),
     Input('decadesDropdown', 'value'),
     Input('input_country','n_submit'),
+    Input('checklistPr','value'),
+    Input('checklistVe','value'),
+    Input('checklistOt','value'),
+    Input('checklistIn','value'),
     State('input_country','value')
     
 )
 
-def zoomin_country(value_dr,enter,value_in):
+def zoomin_country_and_get_values(value_dr,enter,Lpr,Lve,Lot,Lin, value_in):
     for dec in ["70's","80's","90's","00's","10's","20's"]:
         if (value_dr==dec):
             if (dec!="20's"):
@@ -843,15 +865,18 @@ def zoomin_country(value_dr,enter,value_in):
                 year_start=2020
                 year_finish=2023
             m=folium.Map()
+            
+            
             for lat,lon,fat,loc,year,month in zip( df_coordinates.Latitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.Longitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.fatalities[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.location[df_coordinates['year'].between(year_start,year_finish)],df_coordinates.year[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.month[df_coordinates['year'].between(year_start,year_finish)] ):
-                if fat==0:
-                    plane_icon_url ='DashboardAereo\pages\Bplane.png'
-                    folium.Marker(
-                    [lat,lon], popup=f'<i>{loc}</i>\n\nAño-Mes:\n<b>{int(year)}-{month}</b>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
-                else:
-                    plane_icon_url= 'DashboardAereo\pages\Yplane.png'
-                    folium.Marker(
-                    [lat,lon], popup=f'<i>{loc}</i>\n\nDescesos:<b>{int(fat)}</b>\nAño-Mes:<b>\n{int(year)}-{month}</b> ',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
+                if month in Lpr+Lve+Lot+Lin: 
+                    if fat==0:
+                        plane_icon_url ='DashboardAereo\pages\Bplane.png'
+                        folium.Marker(
+                        [lat,lon], popup=f'<i>{loc}</i>\n\nAño-Mes:\n<b>{int(year)}-{month}</b>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
+                    else:
+                        plane_icon_url= 'DashboardAereo\pages\Yplane.png'
+                        folium.Marker(
+                        [lat,lon], popup=f'<i>{loc}</i>\n\nDescesos:<b>{int(fat)}</b>\nAño-Mes:<b>\n{int(year)}-{month}</b> ',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
     if enter is not None:
         fzcountry,fzscore=process.extractOne(value_in, country_dict.keys(), scorer=fuzz.ratio)
         for name,bound in zip(admin_names,geometries):
