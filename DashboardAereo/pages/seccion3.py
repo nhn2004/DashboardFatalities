@@ -760,7 +760,7 @@ def update_linechart(range_s,b1,b2):
             value=int(value)
             fig2.add_annotation(x=month,y=value+2.5,text=f'total:{value}', font={'size':12 ,'color':'blue'}, textangle=0,showarrow=False,align='center',opacity=1)
         fig2.update_layout(autosize=False, width=1100,
-            yaxis_title='Número de accidents',
+            yaxis_title='Número de accidentes',
             xaxis_title = 'Meses',
             title= 'Número de accidentes por mes')
         fig2.update_traces(textfont_color='white')       
@@ -870,11 +870,12 @@ def zoomin_country_and_get_values(value_dr,enter,Lpr,Lve,Lot,Lin, value_in):
             for lat,lon,fat,loc,year,month in zip( df_coordinates.Latitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.Longitude[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.fatalities[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.location[df_coordinates['year'].between(year_start,year_finish)],df_coordinates.year[df_coordinates['year'].between(year_start,year_finish)], df_coordinates.month[df_coordinates['year'].between(year_start,year_finish)] ):
                 if month in Lpr+Lve+Lot+Lin: 
                     if fat==0:
-                        plane_icon_url ='DashboardAereo\pages\Bplane.png'
+                        plane_icon_url ='DashboardAereo/pages/Bplane.png'
                         folium.Marker(
                         [lat,lon], popup=f'<i>{loc}</i>\n\nAño-Mes:\n<b>{int(year)}-{month}</b>',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
                     else:
-                        plane_icon_url= 'DashboardAereo\pages\Yplane.png'
+                        plane_icon_url= 'DashboardAereo/pages/Yplane.png'
+
                         folium.Marker(
                         [lat,lon], popup=f'<i>{loc}</i>\n\nDescesos:<b>{int(fat)}</b>\nAño-Mes:<b>\n{int(year)}-{month}</b> ',icon=folium.CustomIcon(plane_icon_url, icon_size=(20, 20))).add_to(m)
     if enter is not None:

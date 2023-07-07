@@ -93,7 +93,8 @@ layout = html.Div([
                     
         
         
-        html.H5(children=' 1070-2023: Una mirada aérea a los accidentes trágicos que han dejado su huella en la historia', className="text-center", style={'margin-top':'20px'})
+        html.H5(children=' 1970-2023: Una mirada aérea a los accidentes trágicos que han dejado su huella en la historia', className="text-center", style={'margin-top':'20px'})
+
            
 
 

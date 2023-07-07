@@ -67,6 +67,8 @@ top10planes = df.groupby('type').count().sort_values('registration',ascending=Fa
 #GRAPHIC
 figtopplanes=px.bar(top10planes, x = 'registration', y = 'type', title = 'Los 10 modelos de aviones más involucrados en accidentes', orientation = 'h',color = 'registration',color_continuous_scale='Cividis_r')
 
+operators = dfnan.groupby('operator').count().sort_values('date',ascending=False).reset_index()
+
 
 layout = html.Div([
     dbc.Container([
@@ -88,7 +90,37 @@ layout = html.Div([
             dcc.Graph(figure=figtopplanes, id="top-10-planes")
 
         ])
+        ,html.Div([
+            dbc.Row([html.H3("Top 10 operadores (aerolíneas) con mayor número de accidentes")]),
+            dbc.Row([
+                #html.P("Seleccione: "),
+                dcc.Checklist(
+        id='checkbox',
+        options=[{'label': ' Filtrar datos militares', 'value': 'option'}],
+        value=[])
+        ])
+        ]), 
+        html.Div([
+            dcc.Graph('airline')
+        ])
         
 
     ])
 ])
+
+@app.callback(
+    Output('airline', 'figure'),
+    [Input('checkbox', 'value')]
+)
+
+def filterAF(value):
+    if 'option' in value:
+        f1 = operators[~operators['operator'].str.contains('AF')]
+        f2 = f1[~f1['operator'].str.contains('Navy')]
+        f3 = f2[~f2['operator'].str.contains('navy')]
+        return px.bar(f3.head(10), orientation = 'h', y = 'operator',x = 'date',title= 'Los 10 operadores (aerolíneas con más accidentes)', color = 'date', color_continuous_scale = 'Aggrnyl')
+    return px.bar(operators.head(10), orientation = 'h', y = 'operator',x = 'date',title= 'Los 10 operadores (aerolíneas con más accidentes)', color = 'date', color_continuous_scale = 'Aggrnyl') 
+
+
+if __name__ == "__main__":
+    app.run_server(debug=True)
